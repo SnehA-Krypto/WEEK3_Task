@@ -1,0 +1,35 @@
+# Simulation
+*.vcd
+*.fst
+*.vpd
+simv.daidir/
+simv.cst/
+csrc/
+ucli.key
+
+# Synthesis
+*.json
+*_synth.v
+synth.log
+
+# FPGA
+*.bit
+*.mcs
+*.prm
+vivado_project/
+*.jou
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+*.swp
+*~

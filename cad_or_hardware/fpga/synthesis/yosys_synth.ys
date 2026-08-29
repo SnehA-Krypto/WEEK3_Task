@@ -1,0 +1,22 @@
+# Yosys synthesis script for Safety Subsystem
+
+read_verilog -sv source_code/rtl/common/*.sv
+read_verilog -sv source_code/rtl/ecc/*.sv
+read_verilog -sv source_code/rtl/watchdog/*.sv
+read_verilog -sv source_code/rtl/lockstep/*.sv
+read_verilog -sv source_code/rtl/voter/*.sv
+read_verilog -sv source_code/rtl/bist/*.sv
+read_verilog -sv source_code/rtl/top/*.sv
+
+hierarchy -top safety_subsystem_top
+
+# Optimization
+proc; opt; fsm; opt; memory; opt
+
+# Technology mapping for Xilinx 7-series
+synth_xilinx -top safety_subsystem_top -family xc7
+
+# Output
+write_json cad_or_hardware/fpga/synthesis/safety_subsystem_top.json
+write_verilog cad_or_hardware/fpga/synthesis/safety_subsystem_top_synth.v
+stat

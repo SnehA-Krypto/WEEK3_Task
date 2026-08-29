@@ -1,0 +1,29 @@
+// Deadlock freedom properties for safety subsystem
+module deadlock_freedom (
+    input logic clk,
+    input logic rst_n,
+    input logic [3:0] state,
+    input logic ecc_panic,
+    input logic lockstep_mismatch,
+    input logic voter_diag_err,
+    input logic bist_fail,
+    input logic reset_n
+);
+
+    localparam NORMAL = 4'b0001;
+    localparam SAFE = 4'b0010;
+    localparam RESET = 4'b0100;
+    localparam BIST = 4'b1000;
+
+    // No deadlock: if any fault occurs, eventually enter safe state or reset
+    assert property (@(posedge clk)
+        disable iff (!rst_n)
+        (ecc_panic || lockstep_mismatch || voter_diag_err || bist_fail)
+        |-> s_eventually (state == SAFE || state == RESET));
+
+    // Reset always eventually deasserts
+    assert property (@(posedge clk)
+        disable iff (!rst_n)
+        !reset_n |-> s_eventually reset_n);
+
+endmodule
